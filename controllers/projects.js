@@ -53,4 +53,24 @@ router.get('/:id', (req, res) => {
   })
 })
 
+router.delete('/:id', (req, res) => {
+  // delete the join
+  db.categories_projects.destroy({
+    where: { projectId: req.params.id }
+  })
+  .then(() => {
+    // delete the project
+    db.project.destroy({
+      where: { id: req.params.id }
+    })
+    .then(destroyedProject=>{
+      res.redirect('/')
+    }).catch((error) => {
+      res.status(400).render('main/404')
+    })
+  }).catch((error) => {
+    res.status(400).render('main/404')
+  })
+})
+
 module.exports = router

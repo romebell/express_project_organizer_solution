@@ -9,4 +9,14 @@ router.get("/", (req, res) => {
   }).catch(err=>{console.log("error", err)})
 })
 
+router.get('/:id', (req, res) => {
+  db.category.findOne({
+    where: { id: req.params.id },
+    include: [db.project]
+  }).then(category => {
+    console.log(category.projects)
+    res.render('categories/show', {category})
+  }).catch(err=>console.log("Error", err))
+})
+
 module.exports = router
